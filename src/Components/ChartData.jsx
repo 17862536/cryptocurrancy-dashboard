@@ -32,6 +32,7 @@ ChartJS.register(
 export default function ChartData() {
   const { marketdata } = useSelector((state) => state.market);
   const { corrency } = useSelector((state) => state.curr);
+  const {days}=useSelector((state) => state.days)
   const [data, setData] = useState(null);
   const [status, setStatus] = useState(["null"]);
   const dispatch = useDispatch();
@@ -40,7 +41,7 @@ export default function ChartData() {
   async function fetchdata() {
     try {
       const response = await axios.get(
-        `https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=${corrency}&days=365&interval=daily`
+        `https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=${corrency}&days=${days}&interval=daily`
       );
       setStatus("not null");
       setData(response.data);
@@ -52,7 +53,7 @@ export default function ChartData() {
   }
   useEffect(() => {
     fetchdata();
-  }, [corrency, status]);
+  }, [corrency, status,days]);
   if (data !== null) {
     const price = data.prices.map((value) => ({
       x: value[0],
