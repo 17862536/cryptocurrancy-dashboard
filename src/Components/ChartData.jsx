@@ -1,5 +1,7 @@
 import axios from "axios";
+import moment from "moment/moment"
 import React, { useDeferredValue, useEffect, useState } from "react";
+import Button from "./Button"
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -26,22 +28,23 @@ ChartJS.register(
   Legend
 );
 
+
 export default function ChartData() {
   const { marketdata } = useSelector((state) => state.market);
   const { corrency } = useSelector((state) => state.curr);
-  const [data, setData] = useState([]);
+  const [data, setData] = useState(null);
+  const [status, setStatus] = useState(["null"]);
   const dispatch = useDispatch();
+  let option;
+  let dataset;
   async function fetchdata() {
     try {
       const response = await axios.get(
         `https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=${corrency}&days=365&interval=daily`
       );
-
-      // dispatch(marketupdate({resp}))
+      setStatus("not null");
       setData(response.data);
-      console.log(`Market Data: ${data}`);
-
-      console.log(response.data.prices);
+      console.log(data);
     } catch (err) {
       console.log(err);
       console.log(corrency);
@@ -49,6 +52,39 @@ export default function ChartData() {
   }
   useEffect(() => {
     fetchdata();
-  }, [corrency]);
-  return <div>ChartData</div>;
-}
+  }, [corrency, status]);
+  if (data !== null) {
+    const price = data.prices.map((value) => ({
+      x: value[0],
+      y: value[1],
+    }));
+    option = { maintainAspectRatio: false };
+    dataset = {
+      labels: price.map((value) => moment(value.x).format("MMM DD YYYY")),
+      datasets: [
+        {
+          backgroundColor: "rgba(0,0,255,1.0)",
+          borderColor: "rgba(0,0,255,0.1)",
+          data: price.map((value) => value.y),
+        },
+      ],
+    };
+  }
+
+  return(
+      <div>
+        <Button/>
+      {
+    
+    data === null ? (
+      <div>loading...</div>
+    ) : (
+      <div>
+        <Line height={"200%"} options={option} data={dataset} />
+        {console.log(option, dataset)}
+      </div>
+    )
+  }
+  </div>
+
+  )}

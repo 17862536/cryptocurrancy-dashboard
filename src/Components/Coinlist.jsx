@@ -20,8 +20,8 @@ function Coinlist() {
   
   return (
     <div>
-      <div className="text-blue-600 absolute top-[7rem]">COIN LIST</div>
-      <div className="overflow-auto">
+      <div className="text-blue-600 absolute h-[20vh] top-[7rem]">COIN LIST</div>
+      <div className="overflow-auto h-[65vh]">
         {coins.map((items) => {
           return (
             <div className="my-4">
