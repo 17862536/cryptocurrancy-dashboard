@@ -2,8 +2,8 @@ import React from "react";
 
 function DropdownButton({name,list,handleChange}) {
   return (
-    <div>
-      <div class="dropdown inline-block relative">
+    <div >
+      <div class="dropdown inline-block relative ">
         <button class=" text-xl text-items-centre h-10 w-15 bg-red-700 text-white rounded-sm shadow-x1 text-gray-700 font-semibold py-2 px-4 rounded inline-flex items-center bg-green-500">
           <span class="mr-1">{name}</span>
           <svg
